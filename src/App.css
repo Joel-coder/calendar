@@ -1,3 +1,4 @@
+.week,
 .calendar .day {
   position: relative;
   width: calc(30% / 7);
@@ -12,4 +13,7 @@
 }
 .selected {
   background-color: red;
+}
+.today {
+  background-color: blue;
 }
