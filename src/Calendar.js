@@ -27,8 +27,8 @@ export default function Calendar() {
     return value.isSame(day, "day");
   };
 
-  const beforetoday = (day) => {
-    return day.isBefore(new Date(), "day");
+  const isBetween = (day, value) => {
+    return day.isBetween(value, "2021-12-25", "day");
   };
 
   const isToday = (day) => {
@@ -36,11 +36,17 @@ export default function Calendar() {
   };
 
   const dayStyle = (day, value) => {
+    //selected date
     if (isSelected(day, value)) {
       return "selected";
     }
+    //selected date
     if (isToday(day)) {
       return "today";
+    }
+    if (isBetween(day, value)) {
+      //console.log(day);
+      return "test";
     }
   };
 
@@ -92,7 +98,7 @@ export default function Calendar() {
                 className="day"
                 onClick={() => {
                   setValue(day);
-                  console.log(day);
+                  //  console.log(day);
                 }}
               >
                 <div className={dayStyle(day, value)}>{day.format("D")}</div>
