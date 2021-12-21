@@ -2,18 +2,21 @@ import logo from "./logo.svg";
 import React, { useState, useEffect } from "react";
 import moment from "moment";
 import "./App.css";
-
+import Button from "react-bootstrap/Button";
 export default function Calendar() {
   const [value, setValue] = useState(moment());
-  const [borderStart, setBorderStart] = useState(moment());
-  const [valueArr, setValueArr] = useState([]);
+  const [valueArr, setValueArr] = useState([moment()]);
   const [calendar, setCalendar] = useState([]);
-
-  const [style, setStyle] = useState("");
   const startDay = value.clone().startOf("month").startOf("week");
   const endDay = value.clone().endOf("month").endOf("week");
   const a = new Array(2);
-  a[0] = value;
+
+  const setInterval = (day) => {
+    a[0] = value;
+    a[1] = day;
+    console.log(a);
+    setValueArr(a);
+  };
   useEffect(() => {
     const temp = [];
     const day = startDay.clone().subtract(1, "day");
@@ -30,10 +33,31 @@ export default function Calendar() {
   const isSelected = (day, value) => {
     return value.isSame(day, "day");
   };
-  const isBorder = (day) => {
-    console.log("last value", valueArr[0]);
-    return moment(valueArr[0]).isSame(day, "day");
+
+  const isLeft = (day) => {
+    let tempBefore = [];
+
+    if (valueArr[1]?.isAfter(valueArr[0])) {
+      tempBefore = valueArr[0];
+    }
+    if (valueArr[0]?.isAfter(valueArr[1])) {
+      tempBefore = valueArr[1];
+    }
+    return day.isSame(tempBefore);
   };
+
+  const isRight = (day) => {
+    let tempAfter = [];
+
+    if (valueArr[1]?.isAfter(valueArr[0])) {
+      tempAfter = valueArr[1];
+    }
+    if (valueArr[0]?.isAfter(valueArr[1])) {
+      tempAfter = valueArr[0];
+    }
+    return day.isSame(tempAfter);
+  };
+
   const isBetween = (day) => {
     let tempBefore = [];
     let tempAfter = [];
@@ -56,11 +80,7 @@ export default function Calendar() {
 
   const dayStyle = (day, value) => {
     //selected date
-    if (isSelected(day, value)) {
-      // console.log(valueArr);
 
-      return "selected";
-    }
     //selected date
     if (isToday(day)) {
       return "today";
@@ -68,8 +88,11 @@ export default function Calendar() {
     if (isBetween(day, value)) {
       return "test";
     }
-    if (isBorder(day)) {
-      return "selected";
+    if (isLeft(day)) {
+      return "border-left";
+    }
+    if (isRight(day)) {
+      return "border-right";
     }
   };
 
@@ -89,49 +112,57 @@ export default function Calendar() {
   };
 
   return (
-    <div>
-      <div
-        onClick={() => {
-          setValue(prevMonth());
-        }}
-      >
-        {String.fromCharCode(171)}
-      </div>
-      <div>
-        {currentMonthName()}
-        {currentYear()}
-      </div>
-      <div
-        onClick={() => {
-          setValue(nextMonth());
-        }}
-      >
-        {String.fromCharCode(187)}
-      </div>
-      <div>
-        {["s", "m", "t", "w", "t", "f", "s"].map((d) => (
-          <div className="week">{d}</div>
-        ))}
-      </div>
-      <div className="calendar">
-        {calendar.map((week) => (
-          <div>
-            {week.map((day) => (
-              <div
-                className="day"
-                onClick={() => {
-                  setValue(day);
-
-                  a[1] = day;
-                  //    console.log(a);
-                  setValueArr(a);
-                }}
-              >
-                <div className={dayStyle(day, value)}>{day.format("D")}</div>
-              </div>
-            ))}
+    <div className="calendar-container">
+      <div className="w-100">
+        <div
+          className={"d-flex flex-row justify-content-between calendar-header"}
+        >
+          <div
+            className="ms-2 arrows"
+            onClick={() => {
+              setValue(prevMonth());
+            }}
+          >
+            {String.fromCharCode(171)}
           </div>
-        ))}
+          <div>
+            {`
+            ${currentMonthName()} ${currentYear()}
+            `}
+          </div>
+          <div
+            className="me-2 arrows"
+            onClick={() => {
+              setValue(nextMonth());
+            }}
+          >
+            {String.fromCharCode(187)}
+          </div>
+        </div>
+        <div>
+          {["S", "M", "T", "W", "T", "F", "S"].map((d) => (
+            <div className="week">{d}</div>
+          ))}
+        </div>
+        <div className="calendar">
+          {calendar.map((week) => (
+            <div>
+              {week.map((day) => (
+                <div
+                  className="day"
+                  onClick={() => {
+                    setValue(day);
+
+                    setInterval(day);
+                    //    console.log(a);
+                  }}
+                >
+                  <div className={dayStyle(day, value)}>{day.format("D")}</div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

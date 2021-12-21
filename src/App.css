@@ -1,8 +1,8 @@
 .week,
 .calendar .day {
   position: relative;
-  width: calc(30% / 7);
-  height: 44px;
+  width: calc(100% / 7);
+  font-family: Poppins;
   display: inline-block;
   background-color: white;
   padding: 0;
@@ -11,12 +11,38 @@
   z-index: 1;
   text-align: center;
 }
+.calendar-header {
+  width: 100%;
+}
+
+.arrows {
+  font-family: Poppins;
+}
+
+.calendar-container {
+  max-width: 200px;
+}
 .selected {
   background-color: red;
+}
+.border {
+  background-color: red;
+  border-radius: 80%;
 }
 .today {
   background-color: blue;
 }
+.border-right,
+.border-left,
 .test {
-  background-color: yellow;
+  background-color: #5900fe;
+  color: white;
+}
+
+.border-left {
+  border-radius: 80% 0 0 80%;
+}
+
+.border-right {
+  border-radius: 0 80% 80% 0;
 }
