@@ -5,11 +5,15 @@ import "./App.css";
 
 export default function Calendar() {
   const [value, setValue] = useState(moment());
+  const [borderStart, setBorderStart] = useState(moment());
+  const [valueArr, setValueArr] = useState([]);
   const [calendar, setCalendar] = useState([]);
+
   const [style, setStyle] = useState("");
   const startDay = value.clone().startOf("month").startOf("week");
   const endDay = value.clone().endOf("month").endOf("week");
-
+  const a = new Array(2);
+  a[0] = value;
   useEffect(() => {
     const temp = [];
     const day = startDay.clone().subtract(1, "day");
@@ -26,9 +30,24 @@ export default function Calendar() {
   const isSelected = (day, value) => {
     return value.isSame(day, "day");
   };
+  const isBorder = (day) => {
+    console.log("last value", valueArr[0]);
+    return moment(valueArr[0]).isSame(day, "day");
+  };
+  const isBetween = (day) => {
+    let tempBefore = [];
+    let tempAfter = [];
 
-  const isBetween = (day, value) => {
-    return day.isBetween(value, "2021-12-25", "day");
+    if (valueArr[0]?.isAfter(valueArr[1])) {
+      tempAfter = valueArr[0];
+      tempBefore = valueArr[1];
+    }
+    if (valueArr[1]?.isAfter(valueArr[0])) {
+      tempBefore = valueArr[0];
+      tempAfter = valueArr[1];
+    }
+
+    return day.isBetween(tempBefore, tempAfter, "day");
   };
 
   const isToday = (day) => {
@@ -38,6 +57,8 @@ export default function Calendar() {
   const dayStyle = (day, value) => {
     //selected date
     if (isSelected(day, value)) {
+      // console.log(valueArr);
+
       return "selected";
     }
     //selected date
@@ -45,8 +66,10 @@ export default function Calendar() {
       return "today";
     }
     if (isBetween(day, value)) {
-      //console.log(day);
       return "test";
+    }
+    if (isBorder(day)) {
+      return "selected";
     }
   };
 
@@ -98,7 +121,10 @@ export default function Calendar() {
                 className="day"
                 onClick={() => {
                   setValue(day);
-                  //  console.log(day);
+
+                  a[1] = day;
+                  //    console.log(a);
+                  setValueArr(a);
                 }}
               >
                 <div className={dayStyle(day, value)}>{day.format("D")}</div>
