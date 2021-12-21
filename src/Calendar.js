@@ -86,7 +86,7 @@ export default function Calendar() {
       return "today";
     }
     if (isBetween(day, value)) {
-      return "test";
+      return "between";
     }
     if (isLeft(day)) {
       return "border-left";

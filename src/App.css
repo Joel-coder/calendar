@@ -26,6 +26,9 @@
 .calendar-container {
   max-width: 200px;
   margin: auto;
+  border: 1px solid #adb5bd;
+  border-radius: 8px;
+  padding-bottom: 10px;
 }
 .selected {
   background-color: red;
@@ -37,7 +40,7 @@
 .today,
 .border-right,
 .border-left,
-.test {
+.between {
   background-color: #3399ff;
   color: white;
 }
