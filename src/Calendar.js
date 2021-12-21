@@ -71,7 +71,7 @@ export default function Calendar() {
       tempAfter = valueArr[1];
     }
 
-    return day.isBetween(tempBefore, tempAfter, "day");
+    return day.isBetween(tempBefore, tempAfter);
   };
 
   const isToday = (day) => {
@@ -112,56 +112,62 @@ export default function Calendar() {
   };
 
   return (
-    <div className="calendar-container">
-      <div className="w-100">
-        <div
-          className={"d-flex flex-row justify-content-between calendar-header"}
-        >
+    <div className="">
+      <div className="calendar-container">
+        <div className="w-100">
           <div
-            className="ms-2 arrows"
-            onClick={() => {
-              setValue(prevMonth());
-            }}
+            className={
+              "d-flex flex-row justify-content-between align-content-center calendar-header"
+            }
           >
-            {String.fromCharCode(171)}
-          </div>
-          <div>
-            {`
+            <div
+              className="ms-2 arrows"
+              onClick={() => {
+                setValue(prevMonth());
+              }}
+            >
+              {String.fromCharCode(171)}
+            </div>
+            <div className="header-date">
+              {`
             ${currentMonthName()} ${currentYear()}
             `}
-          </div>
-          <div
-            className="me-2 arrows"
-            onClick={() => {
-              setValue(nextMonth());
-            }}
-          >
-            {String.fromCharCode(187)}
-          </div>
-        </div>
-        <div>
-          {["S", "M", "T", "W", "T", "F", "S"].map((d) => (
-            <div className="week">{d}</div>
-          ))}
-        </div>
-        <div className="calendar">
-          {calendar.map((week) => (
-            <div>
-              {week.map((day) => (
-                <div
-                  className="day"
-                  onClick={() => {
-                    setValue(day);
-
-                    setInterval(day);
-                    //    console.log(a);
-                  }}
-                >
-                  <div className={dayStyle(day, value)}>{day.format("D")}</div>
-                </div>
-              ))}
             </div>
-          ))}
+            <div
+              className="me-2 arrows"
+              onClick={() => {
+                setValue(nextMonth());
+              }}
+            >
+              {String.fromCharCode(187)}
+            </div>
+          </div>
+          <div>
+            {["S", "M", "T", "W", "T", "F", "S"].map((d) => (
+              <div className="week">{d}</div>
+            ))}
+          </div>
+          <div className="calendar">
+            {calendar.map((week) => (
+              <div>
+                {week.map((day) => (
+                  <div
+                    className="day"
+                    onClick={() => {
+                      setValue(day);
+
+                      setInterval(day);
+                      //    console.log(a);
+                    }}
+                  >
+                    <div className={dayStyle(day, value)}>
+                      {day.format("D")}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
